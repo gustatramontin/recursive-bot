@@ -59,7 +59,7 @@ unPackPair (Pair s) = s
 
 listFunctions = Map.fromList [
               ("fst", PrimitiveFunction $ head . unPackPair . head)
-            , ("snd", PrimitiveFunction $ Pair . tail . unPackPair . head)
+            , ("rst", PrimitiveFunction $ Pair . tail . unPackPair . head)
             , ("pair", PrimitiveFunction $ Pair . (\xs -> (head xs):(tail xs)) . unPackPair . head)
             , ("len", PrimitiveFunction $ Number . toInteger . length . unPackPair . head)
                              ]
@@ -84,10 +84,11 @@ predicateFunctions = Map.fromList [
         , ("=", PrimitiveFunction $ predicateNumBinOp (==))
         , (">", PrimitiveFunction $ predicateNumBinOp (>))
         , ("<", PrimitiveFunction $ predicateNumBinOp (<))
-        , (">=", PrimitiveFunction $ predicateNumBinOp (>=))
-        , ("<=", PrimitiveFunction $ predicateNumBinOp (<=))
+    --    , (">=", PrimitiveFunction $ predicateNumBinOp (>=))
+    --    , ("<=", PrimitiveFunction $ predicateNumBinOp (<=))
         , ("and", PrimitiveFunction $ predicateBoolBinOp (&&))
         , ("or", PrimitiveFunction $ predicateBoolBinOp (||))
+        , ("not", PrimitiveFunction $ Boolean . not . unPackBool . head)
                                   ]
 
 baseFunctions = Map.unions [

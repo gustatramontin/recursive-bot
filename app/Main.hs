@@ -18,6 +18,7 @@ import           Discord.Internal.Types.Embed (CreateEmbed, EmbedField)
 
 import           Parser
 import           Evaluation
+import           StdLib
 import           Token (token)
 {-
  - Commands
@@ -40,7 +41,8 @@ main = do
 
 eventHandler :: Event -> DiscordHandler ()
 eventHandler (MessageCreate m) = when (isCommand m && not (fromBot m)) $ do
-   let code = '(' `T.cons` (T.tail (messageContent m)) `T.snoc` ')'
+   let std = (T.intercalate " " stdlib)
+       code = (T.append (T.append "(do " std) ('(' `T.cons` (T.tail (messageContent m)) `T.snoc` ')')) `T.snoc` ')'
    res <- liftIO $ run $ parse code
    void $ restCall (R.CreateMessage (messageChannelId m) (T.pack res))
 
